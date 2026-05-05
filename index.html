@@ -266,5 +266,22 @@
     👁️ Уровень исследован не полностью, открытия продолжаются.
 </footer>
 </div>
+
+<!-- Счётчик дней -->
+<div id="counter" style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #8d9aa8;">
+    📊 Странников попали на уровень 809: <span id="daysCount">0</span>
+</div>
+
+<script>
+    const startDate = new Date(2026, 1, 16); // 16 февраля 2026 (месяцы в JS: 1 = февраль)
+    const today = new Date();
+    const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+    const baseCount = 0;  // начальное число (можно настроить)
+    const incrementPerDay = 6;
+    
+    let totalCount = baseCount + (diffDays > 0 ? diffDays * incrementPerDay : 0);
+    document.getElementById('daysCount').innerText = totalCount;
+</script>
+    
 </body>
 </html>
