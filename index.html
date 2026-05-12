@@ -366,25 +366,24 @@
     <h2>🏝️ Остров-мираж</h2>
     <p>В редкие дни в тумане виднеется неясная земля. <a href="island.html">Подробнее об этой аномалии…</a></p>
 
-    <h2 id="exit">🚪 Входы и выходы</h2>
-    <p><strong>Вход:</strong> окунуться в воду на 1 минуту в любом из следующих мест:</p>
-    <ul>
-        <li>Level 7 (Бесконечный океан)</li>
-        <li>Level 7.2 (Затопленный ужас)</li>
-        <li>Level 37 (Бассейн)</li>
-        <li>Level 37.01 (Тёмные воды)</li>
-        <li>Level 100 (Сумерки)</li>
-        <li>Level 103 (Аквариум)</li>
-        <li>Level 375 (Хижины над водой)</li>
-    </ul>
-    <p><strong>Выход:</strong> ровно через <strong>90 дней</strong> сознание отключается, и странник просыпается на <strong>случайном уровне Class 2</strong>, держа в руке двухлитровую бутылку миндальной воды. Если Суд признал виновным — срок увеличивается до <strong>120 дней</strong>. Контейнер, море и туман исчезают навсегда.</p>
+<h2 id="exit">🚪 Входы и выходы</h2>
+<p><strong>Вход:</strong> окунуться в воду на 1 минуту в любом из следующих мест:</p>
+<ul>
+    <li>Level 7 (Бесконечный океан)</li>
+    <li>Level 7.2 (Затопленный ужас)</li>
+    <li>Level 37 (Бассейн)</li>
+    <li>Level 37.01 (Тёмные воды)</li>
+    <li>Level 100 (Сумерки)</li>
+    <li>Level 103 (Аквариум)</li>
+    <li>Level 375 (Хижины над водой)</li>
+</ul>
+<p><strong>Выход:</strong> ровно через <strong>90 дней</strong> сознание отключается, и странник просыпается на <strong>случайном уровне Class 2</strong>, держа в руке двухлитровую бутылку миндальной воды. Если Суд признал виновным — срок увеличивается до <strong>120 дней</strong>. Контейнер, море и туман исчезают навсегда.</p>
 
-    <hr>
-    <footer>
-        Level 809: «Серая Гладь» — создан Sombik808. Материалы распространяются под лицензией CC BY-SA 3.0.<br>
-        👁️ Уровень исследован не полностью, открытия продолжаются.
-    </footer>
-</div>
+<hr>
+<footer>
+    Level 809: «Серая Гладь» — создан Sombik808. Материалы распространяются под лицензией CC BY-SA 3.0.<br>
+    👁️ Уровень исследован не полностью, открытия продолжаются.
+</footer>
 
 <!-- Счётчик дней -->
 <div id="counter" style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #8d9aa8;">
@@ -397,16 +396,65 @@
     </a>
 </div>
 
+<!-- ИНТЕРАКТИВНАЯ БОЧКА С ШАНСАМИ -->
+<div class="barrel-game" style="background: #0c0f12; border: 1px solid #4a3a2a; border-radius: 24px; padding: 1.5rem; margin: 2rem auto; text-align: center; max-width: 600px;">
+    <h3>🎲 Вытянуть бочку</h3>
+    <p>Серые бочки плавают рядом. Какая попадётся сегодня?</p>
+    <button id="openBarrelBtn" style="background: #3a2a1a; border: none; color: #e0c080; font-size: 1.2rem; padding: 10px 24px; border-radius: 40px; cursor: pointer; font-family: monospace; margin: 1rem 0; transition: 0.2s;">🛢️ Открыть бочку</button>
+    <div id="barrelResult" style="background: #07090c; border-radius: 16px; padding: 1rem; margin-top: 1rem; font-weight: bold; color: #b0b7bc; min-height: 80px;">
+        Нажми на бочку, странник...
+    </div>
+</div>
+
 <script>
+    // Счётчик странников
     const startDate = new Date(2026, 1, 16);
     const today = new Date();
     const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
     const baseCount = 0;
     const incrementPerDay = 6;
     let totalCount = baseCount + (diffDays > 0 ? diffDays * incrementPerDay : 0);
-    document.getElementById('daysCount').innerText = totalCount;
+    if (document.getElementById('daysCount')) {
+        document.getElementById('daysCount').innerText = totalCount;
+    }
+
+    // Интерактивная бочка с шансами (по лору уровня 809)
+    const barrelOptions = [
+        { name: "📦 Обычная еда и вода", desc: "Ты выживешь ещё несколько дней.", chance: 40, color: "#8a9a8a" },
+        { name: "☠️ Отравленная еда", desc: "Сильный запах винограда. Ты теряешь сознание на 4 часа.", chance: 35, color: "#c08060" },
+        { name: "⚫ Чёрная бочка", desc: "5% — редкость. 75% риск Красного часа, но внутри — миндальная вода.", chance: 5, color: "#aa8866" },
+        { name: "🗡️ Проклятый нож", desc: "Менее 1%. На лезвии: «УБЕЙ СЕБЯ». Шёпот начинается.", chance: 0.8, color: "#aa5555" },
+        { name: "👕 Одежда погибшего", desc: "Менее 2%. Чья-то куртка. Кто был здесь до тебя?", chance: 2, color: "#6a7a7a" },
+        { name: "🍇 Виноградовая вода", desc: "Менее 2%. Пахнет виноградом, но действует как миндальная. Рискни.", chance: 2, color: "#7a5a4a" },
+        { name: "🛠️ Доски и гвозди", desc: "Редко. Можно починить трап. Упасть в воду сложнее.", chance: 5, color: "#8a7a5a" },
+        { name: "🍇 Виноградовая вода (ложная)", desc: "Ты думал, это миндалка. Но нет. Отравление через 10 минут.", chance: 10.2, color: "#b06050" }
+    ];
+
+    function getRandomBarrel() {
+        let random = Math.random() * 100;
+        let cumulative = 0;
+        for (let item of barrelOptions) {
+            cumulative += item.chance;
+            if (random < cumulative) {
+                return item;
+            }
+        }
+        return barrelOptions[0];
+    }
+
+    const barrelBtn = document.getElementById('openBarrelBtn');
+    if (barrelBtn) {
+        barrelBtn.addEventListener('click', function() {
+            const result = getRandomBarrel();
+            const resultDiv = document.getElementById('barrelResult');
+            if (resultDiv) {
+                resultDiv.innerHTML = `<span style="color: ${result.color};">${result.name}</span><br><span style="font-size: 0.9rem;">${result.desc}</span>`;
+            }
+            barrelBtn.style.transform = 'scale(0.98)';
+            setTimeout(() => { barrelBtn.style.transform = 'scale(1)'; }, 100);
+        });
+    }
 </script>
-<script data-goatcounter="https://sombik.goatcounter.com/count"
-    async src="https://gc.zgo.at/count.js"></script>
+<script data-goatcounter="https://sombik.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
-    </html>
+</html>
