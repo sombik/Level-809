@@ -222,6 +222,41 @@
     </style>
 </head>
 <body>
+    <!-- ЭКРАН-ЗАСТАВКА ПРИ КАЖДОМ ВХОДЕ -->
+<div id="splashScreen" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    color: #ff3333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    font-size: 2rem;
+    text-align: center;
+    z-index: 9999;
+    transition: opacity 1s ease;
+    opacity: 1;
+    pointer-events: none;
+">
+    Приветствую тебя, странник
+</div>
+
+<script>
+    function hideSplash() {
+        let splash = document.getElementById('splashScreen');
+        if (splash) {
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 1000);
+        }
+    }
+    setTimeout(hideSplash, 2500);
+</script>
 <div class="container">
     <h1>Level 809</h1>
     <div>«Серая Гладь»</div>
